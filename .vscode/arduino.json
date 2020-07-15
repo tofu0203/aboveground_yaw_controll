@@ -1,0 +1,5 @@
+{
+    "board": "arduino:sam:arduino_due_x_dbg",
+    "sketch": "aboveground_yaw_controll.ino",
+    "port": "/dev/ttyACM0"
+}

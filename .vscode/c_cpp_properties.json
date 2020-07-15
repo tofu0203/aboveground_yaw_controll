@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/robog/.arduino15/packages/arduino/tools/**",
+                "/home/robog/.arduino15/packages/arduino/hardware/sam/1.6.12/**",
+                "/home/robog/arduino-1.8.13/hardware/arduino/avr/cores/arduino",
+                "/home/robog/arduino-1.8.13/hardware/arduino/avr/variants/standard",
+                "/home/robog/arduino-1.8.13/hardware/tools/avr/avr/include",
+                "/home/robog/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include",
+                "/home/robog/arduino-1.8.13/libraries/**"
+            ],
+            "forcedInclude": [
+                "/home/robog/.arduino15/packages/arduino/hardware/sam/1.6.12/cores/arduino/Arduino.h"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "browse": {
+                "path": [
+                    "/home/robog/arduino-1.8.13/hardware/arduino/avr/cores/arduino",
+                    "/home/robog/arduino-1.8.13/hardware/arduino/avr/variants/standard",
+                    "/home/robog/arduino-1.8.13/hardware/tools/avr/avr/include",
+                    "/home/robog/arduino-1.8.13/hardware/tools/avr/lib/gcc/avr/7.3.0/include",
+                    "/home/robog/arduino-1.8.13/libraries"
+                ]
+            },
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
