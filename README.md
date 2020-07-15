@@ -1,0 +1,2 @@
+# aboveground_yaw_controll
+rosserialを用いてPCから送られてきたyaw指令値をブラシレスモーターに出力する
