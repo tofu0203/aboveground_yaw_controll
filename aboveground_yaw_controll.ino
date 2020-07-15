@@ -13,10 +13,10 @@ Servo brushlessmotor3;
 Servo brushlessmotor4;
 
 float standard_throttle = 1700.0;
-float brushless1_command = standard_throttle;
-float brushless2_command = standard_throttle;
-float brushless3_command = standard_throttle;
-float brushless4_command = standard_throttle;
+int brushless1_command;
+int brushless2_command;
+int brushless3_command;
+int brushless4_command;
 
 int limit_servo_command_value(float value)
 {
