@@ -4,20 +4,23 @@
 #include <std_msgs/Float32.h>
 #include <Servo.h>
 
+//--------ros設定--------------
 ros::NodeHandle node;
 std_msgs::Float32 yaw_sub_value;
 
+//---ブラシレスモーター設定---------
 Servo brushlessmotor1;
 Servo brushlessmotor2;
 Servo brushlessmotor3;
 Servo brushlessmotor4;
 
-float standard_throttle = 1700.0;
+float standard_throttle = 1700.0;//機体の自重分のスロットル
 int brushless1_command;
 int brushless2_command;
 int brushless3_command;
 int brushless4_command;
 
+//サーボのコマンドを1100から1900に制限
 int limit_servo_command_value(float value)
 {
 	float limit_max = 1900.0;
@@ -36,6 +39,8 @@ int limit_servo_command_value(float value)
 	}
 }
 
+//コールバック関数
+//自重分のスロットル+yaw制御分にリミットをかけモータに出力
 void yawCallback(const std_msgs::Float32 &command_value)
 {
 	brushless1_command = limit_servo_command_value(standard_throttle + command_value.data / 2.0);
