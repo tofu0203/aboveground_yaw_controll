@@ -14,7 +14,7 @@ Servo brushlessmotor2;
 Servo brushlessmotor3;
 Servo brushlessmotor4;
 
-float standard_throttle = 1700.0;//機体の自重分のスロットル
+float standard_throttle = 1250.0; //機体の自重分のスロットル
 int brushless1_command;
 int brushless2_command;
 int brushless3_command;
@@ -51,28 +51,46 @@ void yawCallback(const std_msgs::Float32 &command_value)
 	brushlessmotor2.writeMicroseconds(brushless2_command);
 	brushlessmotor3.writeMicroseconds(brushless3_command);
 	brushlessmotor4.writeMicroseconds(brushless4_command);
+	node.loginfo(String(brushless1_command).c_str());
 }
 
 ros::Subscriber<std_msgs::Float32> sub("yaw_command", &yawCallback);
 
 void setup()
 {
+	node.getHardware()->setBaud(115200);
 	node.initNode();
 	node.subscribe(sub);
 	int start_time = millis();
 	//-----------------------------------
-	brushlessmotor1.attach(2);
-	brushlessmotor2.attach(3);
-	brushlessmotor3.attach(4);
-	brushlessmotor4.attach(5);
+	brushlessmotor1.attach(10);
+	brushlessmotor2.attach(11);
+	brushlessmotor3.attach(12);
+	brushlessmotor4.attach(13);
 	while (start_time + 10000 < millis())
 	{
-		brushlessmotor1.writeMicroseconds(1000);
-		brushlessmotor2.writeMicroseconds(1000);
-		brushlessmotor3.writeMicroseconds(1000);
-		brushlessmotor4.writeMicroseconds(1000);
+		brushless1_command = limit_servo_command_value(1000);
+		brushless2_command = limit_servo_command_value(1000);
+		brushless3_command = limit_servo_command_value(1000);
+		brushless4_command = limit_servo_command_value(1000);
+		brushlessmotor1.writeMicroseconds(brushless1_command);
+		brushlessmotor2.writeMicroseconds(brushless2_command);
+		brushlessmotor3.writeMicroseconds(brushless3_command);
+		brushlessmotor4.writeMicroseconds(brushless4_command);
+	}
+	while (start_time + 15000 < millis())
+	{
+		brushless1_command = limit_servo_command_value(1250);
+		brushless2_command = limit_servo_command_value(1250);
+		brushless3_command = limit_servo_command_value(1250);
+		brushless4_command = limit_servo_command_value(1250);
+		brushlessmotor1.writeMicroseconds(brushless1_command);
+		brushlessmotor2.writeMicroseconds(brushless2_command);
+		brushlessmotor3.writeMicroseconds(brushless3_command);
+		brushlessmotor4.writeMicroseconds(brushless4_command);
 	}
 	//-----------------------------------
+	node.loginfo("Set Up END!!");
 }
 
 void loop()
