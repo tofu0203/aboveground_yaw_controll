@@ -14,11 +14,13 @@ Servo brushlessmotor2;
 Servo brushlessmotor3;
 Servo brushlessmotor4;
 
-float standard_throttle = 1250.0; //機体の自重分のスロットル
+float standard_throttle = 1300.0; //機体の自重分のスロットル
 int brushless1_command;
 int brushless2_command;
 int brushless3_command;
 int brushless4_command;
+
+int start_time = millis();
 
 //サーボのコマンドを1100から1900に制限
 int limit_servo_command_value(float value)
@@ -43,10 +45,20 @@ int limit_servo_command_value(float value)
 //自重分のスロットル+yaw制御分にリミットをかけモータに出力
 void yawCallback(const std_msgs::Float32 &command_value)
 {
-	brushless1_command = limit_servo_command_value(standard_throttle + command_value.data / 2.0);
-	brushless2_command = limit_servo_command_value(standard_throttle - command_value.data / 2.0);
-	brushless3_command = limit_servo_command_value(standard_throttle + command_value.data / 2.0);
-	brushless4_command = limit_servo_command_value(standard_throttle - command_value.data / 2.0);
+	if (millis() < start_time + 10000)
+	{
+		brushless1_command = 1000;
+		brushless2_command = 1000;
+		brushless3_command = 1000;
+		brushless4_command = 1000;
+	}
+	else
+	{
+		brushless1_command = limit_servo_command_value(standard_throttle + command_value.data / 2.0);
+		brushless2_command = limit_servo_command_value(standard_throttle - command_value.data / 2.0);
+		brushless3_command = limit_servo_command_value(standard_throttle + command_value.data / 2.0);
+		brushless4_command = limit_servo_command_value(standard_throttle - command_value.data / 2.0);
+	}
 	brushlessmotor1.writeMicroseconds(brushless1_command);
 	brushlessmotor2.writeMicroseconds(brushless2_command);
 	brushlessmotor3.writeMicroseconds(brushless3_command);
@@ -55,41 +67,24 @@ void yawCallback(const std_msgs::Float32 &command_value)
 }
 
 ros::Subscriber<std_msgs::Float32> sub("yaw_command", &yawCallback);
-
 void setup()
 {
-	node.getHardware()->setBaud(115200);
-	node.initNode();
-	node.subscribe(sub);
-	int start_time = millis();
 	//-----------------------------------
 	brushlessmotor1.attach(10);
 	brushlessmotor2.attach(11);
 	brushlessmotor3.attach(12);
 	brushlessmotor4.attach(13);
-	while (start_time + 10000 < millis())
-	{
-		brushless1_command = limit_servo_command_value(1000);
-		brushless2_command = limit_servo_command_value(1000);
-		brushless3_command = limit_servo_command_value(1000);
-		brushless4_command = limit_servo_command_value(1000);
-		brushlessmotor1.writeMicroseconds(brushless1_command);
-		brushlessmotor2.writeMicroseconds(brushless2_command);
-		brushlessmotor3.writeMicroseconds(brushless3_command);
-		brushlessmotor4.writeMicroseconds(brushless4_command);
-	}
-	while (start_time + 15000 < millis())
-	{
-		brushless1_command = limit_servo_command_value(1250);
-		brushless2_command = limit_servo_command_value(1250);
-		brushless3_command = limit_servo_command_value(1250);
-		brushless4_command = limit_servo_command_value(1250);
-		brushlessmotor1.writeMicroseconds(brushless1_command);
-		brushlessmotor2.writeMicroseconds(brushless2_command);
-		brushlessmotor3.writeMicroseconds(brushless3_command);
-		brushlessmotor4.writeMicroseconds(brushless4_command);
-	}
-	//-----------------------------------
+	brushless1_command = 1000;
+	brushless2_command = 1000;
+	brushless3_command = 1000;
+	brushless4_command = 1000;
+	brushlessmotor1.writeMicroseconds(brushless1_command);
+	brushlessmotor2.writeMicroseconds(brushless2_command);
+	brushlessmotor3.writeMicroseconds(brushless3_command);
+	brushlessmotor4.writeMicroseconds(brushless4_command);
+	node.getHardware()->setBaud(115200);
+	node.initNode();
+	node.subscribe(sub);
 	node.loginfo("Set Up END!!");
 }
 
